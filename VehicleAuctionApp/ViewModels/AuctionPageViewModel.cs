@@ -7,11 +7,12 @@ namespace VehicleAuctionApp.ViewModels
 {
     public class AuctionPageViewModel : INotifyPropertyChanged
     {
-        private List<Auction> _auctions;
-        private Auction _selectedAuction;
+        #region Properties
+        private List<Auction>? _auctions;
+        private Auction? _selectedAuction;
         public List<Auction> Auctions
         {
-            get => _auctions;
+            get => _auctions!;
             set
             {
                 _auctions = value;
@@ -37,12 +38,17 @@ namespace VehicleAuctionApp.ViewModels
         }
 
         public ICommand NavigateToDetailsCommand { get; }
+        #endregion
+
+        #region Constructor
         public AuctionPageViewModel()
         {
             LoadAuctions();
             NavigateToDetailsCommand = new Command<Auction>(NavigateToDetails);
         }
+        #endregion
 
+        #region Methods
         private void LoadAuctions()
         {
             Auctions = App.AuctionList ?? new List<Auction>();
@@ -53,14 +59,20 @@ namespace VehicleAuctionApp.ViewModels
         {
             if (auction == null)
                 return;
+
             SelectedAuction = null;
-            await Application.Current.MainPage.Navigation.PushAsync(new Views.Auctions.AuctionDetails(auction));
 
-
+            if (Application.Current?.MainPage?.Navigation != null)
+            {
+                await Application.Current.MainPage.Navigation.PushAsync(new Views.Auctions.AuctionDetails(auction));
+            }
         }
+        #endregion
 
+        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null) =>
+        protected void OnPropertyChanged([CallerMemberName] string? name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        #endregion
     }
 }

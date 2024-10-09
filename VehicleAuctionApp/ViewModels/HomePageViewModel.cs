@@ -8,15 +8,16 @@ namespace VehicleAuctionApp.ViewModels
 {
     public class HomePageViewModel
     {
+        #region Properties
         private DateTime _nextAuctionDate;
-        private string _daysRemaining;
+        private string? _daysRemaining;
         private List<CustomColumnDefinition> _auctionColumnDefinitions;
-        private Vehicle _selectedVehicle;
+        private Vehicle? _selectedVehicle;
         private Vehicle? _highestBidVehicle;
         public List<Vehicle> MostFavoritedVehicles { get; set; }
         public string DaysRemaining
         {
-            get => _daysRemaining;
+            get => _daysRemaining!;
             set
             {
                 _daysRemaining = value;
@@ -46,9 +47,9 @@ namespace VehicleAuctionApp.ViewModels
             }
         }
 
-        public Vehicle SelectedVehicle
+        public Vehicle? SelectedVehicle
         {
-            get => _selectedVehicle;
+            get => _selectedVehicle!;
             set
             {
                 if (_selectedVehicle != value)
@@ -75,7 +76,19 @@ namespace VehicleAuctionApp.ViewModels
                 }
             }
         }
+        #endregion
 
+        #region Constructor
+        public HomePageViewModel()
+        {
+            _auctionColumnDefinitions = new List<CustomColumnDefinition>();
+            MostFavoritedVehicles = new List<Vehicle>();
+            InitializeColumnDefinitions();
+            LoadData();
+        }
+        #endregion
+
+        #region Methods
         private void InitializeColumnDefinitions()
         {
             AuctionColumnDefinitions = new List<CustomColumnDefinition>
@@ -84,12 +97,6 @@ namespace VehicleAuctionApp.ViewModels
                 new CustomColumnDefinition { Header = "Model", BindingProperty = "Model", IsBold = true, Width = 100 },
                 new CustomColumnDefinition { Header = "Year", BindingProperty = "Year", IsBold = true, Width = 100 },
             };
-        }
-
-        public HomePageViewModel()
-        {
-            InitializeColumnDefinitions();
-            LoadData();
         }
 
         private void LoadData()
@@ -110,7 +117,10 @@ namespace VehicleAuctionApp.ViewModels
             if (vehicle == null)
                 return;
             SelectedVehicle = null;
-            await Application.Current.MainPage.Navigation.PushAsync(new Views.Vehicles.VehicleDetails(vehicle));
+            if (Application.Current?.MainPage?.Navigation != null)
+            {
+                await Application.Current.MainPage.Navigation.PushAsync(new Views.Vehicles.VehicleDetails(vehicle));
+            }
         }
 
 
@@ -127,10 +137,12 @@ namespace VehicleAuctionApp.ViewModels
                 DaysRemaining = "Auction started!";
             }
         }
+        #endregion
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null) =>
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        #endregion
     }
 }

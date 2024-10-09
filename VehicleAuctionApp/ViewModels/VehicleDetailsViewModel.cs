@@ -7,15 +7,16 @@ namespace VehicleAuctionApp.ViewModels
 
     public class VehicleDetailsViewModel : INotifyPropertyChanged
     {
-        private ImageSource _imageSource;
-        private Vehicle _vehicle;
+        #region Properties
+        private ImageSource? _imageSource;
+        private Vehicle? _vehicle;
         private string _auctionDate;
         private string _auctionTime;
         private DateTime _vehicleAuctionDateTime;
 
-        public ImageSource ImageSource
+        public ImageSource? ImageSource
         {
-            get => _imageSource;
+            get => _imageSource!;
             set
             {
                 if (_imageSource != value)
@@ -29,10 +30,10 @@ namespace VehicleAuctionApp.ViewModels
 
         public bool Favourite
         {
-            get => _vehicle.Favourite;
+            get => _vehicle!.Favourite;
             set
             {
-                if (_vehicle.Favourite != value)
+                if (_vehicle!.Favourite != value)
                 {
                     _vehicle.Favourite = value;
                     OnPropertyChanged(nameof(Favourite));
@@ -46,7 +47,7 @@ namespace VehicleAuctionApp.ViewModels
 
         public Vehicle Vehicle
         {
-            get => _vehicle;
+            get => _vehicle!;
             set
             {
 
@@ -55,7 +56,6 @@ namespace VehicleAuctionApp.ViewModels
 
             }
         }
-
 
         public string TimeUntilAuction
         {
@@ -72,7 +72,9 @@ namespace VehicleAuctionApp.ViewModels
 
         public string AuctionDate => _auctionDate;
         public string AuctionTime => _auctionTime;
+        #endregion
 
+        #region Constructor
         public VehicleDetailsViewModel(Vehicle vehicle)
         {
             ImageSource = ImageSource.FromFile("dotnet_bot.png");
@@ -83,17 +85,21 @@ namespace VehicleAuctionApp.ViewModels
             ToggleFavouriteCommand = new Command(ToggleFavourite);
 
         }
+        #endregion
+
+        #region Methods
         private void ToggleFavourite()
         {
             Favourite = !Favourite;
         }
+        #endregion
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
+        #endregion
     }
 }

@@ -7,6 +7,7 @@
     <UseMaui>true</UseMaui>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +19,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VehicleAuctionApp\VehicleAuctionApp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Update="Resources\Raw\vehicles_dataset.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

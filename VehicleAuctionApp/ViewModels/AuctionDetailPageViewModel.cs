@@ -11,13 +11,13 @@ namespace VehicleAuctionApp.ViewModels
 {
     public class AuctionDetailPageViewModel : INotifyPropertyChanged
     {
-
+        #region Fields
         private int _selectedVehiclesPerPage;
         private int _currentPage = 1;
         public decimal _filterStartingBid;
-        public string _filterMake;
-        public string _filterModel;
-        private string _selectedSortOption;
+        public string _filterMake = string.Empty;
+        public string _filterModel = string.Empty;
+        private string _selectedSortOption = string.Empty;
         private bool _isDescending;
         private bool _isBusy;
         private bool _canGoToNextPage;
@@ -25,9 +25,11 @@ namespace VehicleAuctionApp.ViewModels
         private readonly IDialogService _dialogService;
         private readonly INavigation _navigation;
         private int _totalFilteredVehicles;
-        private string _daysRemaining;
+        private string _daysRemaining = string.Empty;
+        #endregion
 
-        private Auction _auction;
+        #region Properties
+        private Auction? _auction;
         public ObservableCollection<Vehicle> FilteredVehicles { get; set; } = new ObservableCollection<Vehicle>();
         public ObservableCollection<string> Makes { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Models { get; set; } = new ObservableCollection<string>();
@@ -51,7 +53,6 @@ namespace VehicleAuctionApp.ViewModels
         public List<Vehicle> Vehicles => SelectedAuction?.Vehicles ?? new List<Vehicle>();
         public ICommand VehicleTappedCommand { get; }
         public ICommand ApplyFilterCommand { get; }
-        public ICommand LoadMoreVehiclesCommand { get; }
         public ICommand ApplySortCommand { get; }
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
@@ -61,7 +62,7 @@ namespace VehicleAuctionApp.ViewModels
 
         public Auction SelectedAuction
         {
-            get => _auction;
+            get => _auction!;
             set
             {
                 _auction = value;
@@ -210,8 +211,9 @@ namespace VehicleAuctionApp.ViewModels
                 OnPropertyChanged(nameof(DaysRemaining));
             }
         }
+        #endregion
 
-
+        #region Constructor
         public AuctionDetailPageViewModel(Auction auction, IDialogService dialogService, INavigation navigation)
         {
             _dialogService = dialogService;
@@ -228,7 +230,9 @@ namespace VehicleAuctionApp.ViewModels
             OpenSortPopupCommand = new Command(OpenSortPopup);
             LoadInitialVehicles();
         }
+        #endregion
 
+        #region Methods
         private void LoadInitialVehicles()
         {
             if (SelectedAuction == null || !SelectedAuction.Vehicles.Any()) return;
@@ -253,7 +257,10 @@ namespace VehicleAuctionApp.ViewModels
             if (vehicle == null)
                 return;
 
-            await Application.Current.MainPage.Navigation.PushAsync(new VehicleDetails(vehicle));
+            if (Application.Current?.MainPage?.Navigation != null)
+            {
+                await Application.Current.MainPage.Navigation.PushAsync(new VehicleDetails(vehicle));
+            }
         }
 
         private async void ApplyFilters()
@@ -282,7 +289,6 @@ namespace VehicleAuctionApp.ViewModels
             OnPropertyChanged(nameof(FilteredVehicles));
             IsBusy = false;
         }
-
 
         private async void ApplySort()
         {
@@ -384,11 +390,14 @@ namespace VehicleAuctionApp.ViewModels
                 DaysRemaining = "Auction started!";
             }
         }
+        #endregion
 
+        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion
     }
 }

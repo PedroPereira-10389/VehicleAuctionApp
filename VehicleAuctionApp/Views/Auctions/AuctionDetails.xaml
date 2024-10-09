@@ -70,7 +70,6 @@
             </StackLayout>
         </ScrollView>
 
-        <!-- Indicador de Carregamento -->
         <StackLayout IsVisible="{Binding IsBusy}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
             <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource Primary}" />
             <Label Text="Loading Vehicles, please wait..." 

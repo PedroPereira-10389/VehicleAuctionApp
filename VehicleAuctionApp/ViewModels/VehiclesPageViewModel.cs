@@ -9,9 +9,10 @@ namespace VehicleAuctionApp.ViewModels
 {
     public class VehiclesPageViewModel
     {
-        private List<Vehicle> _vehicles;
+        #region Properties
+        private List<Vehicle>? _vehicles;
         private List<CustomColumnDefinition> _auctionColumnDefinitions;
-        private Vehicle _selectedVehicle;
+        private Vehicle? _selectedVehicle;
         private int _currentPage = 1;
         public ObservableCollection<Vehicle> FilteredVehicles { get; set; } = new ObservableCollection<Vehicle>();
         private int _selectedVehiclesPerPage;
@@ -22,16 +23,16 @@ namespace VehicleAuctionApp.ViewModels
         public ICommand PreviousPageCommand { get; }
         public List<Vehicle> Vehicles
         {
-            get => _vehicles;
+            get => _vehicles!;
             set
             {
                 _vehicles = value;
             }
         }
 
-        public Vehicle SelectedVehicle
+        public Vehicle? SelectedVehicle
         {
-            get => _selectedVehicle;
+            get => _selectedVehicle!;
             set
             {
                 if (_selectedVehicle != value)
@@ -79,16 +80,22 @@ namespace VehicleAuctionApp.ViewModels
                 OnPropertyChanged();
             }
         }
+        #endregion
 
+        #region Constructor
         public VehiclesPageViewModel()
         {
+            _auctionColumnDefinitions = new List<CustomColumnDefinition>();
+
             InitializeColumnDefinitions();
             SelectedVehiclesPerPage = 10;
             _ = LoadPageDataAsync();
             NextPageCommand = new Command(GoToNextPage);
             PreviousPageCommand = new Command(GoToPreviousPage);
         }
+        #endregion
 
+        #region Methods
         private async Task LoadPageDataAsync()
         {
             await LoadAuctions();
@@ -125,8 +132,7 @@ namespace VehicleAuctionApp.ViewModels
                     }
                 }
 
-
-                LoadInitialVehicles();
+                await Task.Run(() => LoadInitialVehicles());
             }
         }
 
@@ -157,8 +163,13 @@ namespace VehicleAuctionApp.ViewModels
         {
             if (vehicle == null)
                 return;
+
             SelectedVehicle = null;
-            await Application.Current.MainPage.Navigation.PushAsync(new Views.Vehicles.VehicleDetails(vehicle));
+
+            if (Application.Current?.MainPage?.Navigation != null)
+            {
+                await Application.Current.MainPage.Navigation.PushAsync(new Views.Vehicles.VehicleDetails(vehicle));
+            }
         }
 
         private void GoToNextPage()
@@ -178,10 +189,13 @@ namespace VehicleAuctionApp.ViewModels
                 LoadInitialVehicles();
             }
         }
+        #endregion
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        #endregion
 
     }
 }
