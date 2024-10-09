@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Frame 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="VehicleAuctionApp.Views.Components.CardsComponent"
+    CornerRadius="10"
+    Padding="10"
+    HasShadow="True"
+    BorderColor="LightGray"
+    BackgroundColor="White"
+    x:Name="ThisBCAFrame"
+    >
+    <Frame.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding TapCommand, Source={x:Reference ThisBCAFrame}}" CommandParameter="{Binding Vehicle, Source={x:Reference ThisBCAFrame}}" />
+    </Frame.GestureRecognizers>
+    <StackLayout>
+        <Image Source="dotnet_bot.png"
+               Aspect="AspectFill"
+               HeightRequest="150"
+               HorizontalOptions="FillAndExpand" />
+
+        <Label Text="{Binding Make}"
+               FontAttributes="Bold"
+               FontSize="Medium"
+               HorizontalOptions="Center" />
+
+        <Label Text="{Binding Model}"
+               FontSize="Small"
+               HorizontalOptions="Center" />
+        
+        <Label Text="{Binding StartingBid, StringFormat='Starting Bid: {0}€'}"
+               FontSize="Small"
+               HorizontalOptions="Center" />
+    </StackLayout>
+</Frame>

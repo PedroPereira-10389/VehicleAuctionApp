@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:VehicleAuctionApp.Views.Components"
+             x:Class="VehicleAuctionApp.Views.Components.TableViewComponent"
+             x:Name="ThisContentView"
+             >
+    <ContentView.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryDark}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentView.Resources>
+    
+    <ContentView.Content>
+        <StackLayout>
+            <Grid BackgroundColor="{StaticResource SecondaryDarkText}" Padding="10">
+                <ScrollView Orientation="Horizontal">
+                    <StackLayout Orientation="Horizontal" x:Name="HeaderStack">
+                   
+                    </StackLayout>
+                </ScrollView>
+            </Grid>
+            <Border Stroke="{StaticResource PrimaryDark}" StrokeThickness="2">
+                <CollectionView x:Name="TableCollectionView"
+                            ItemsSource="{Binding Items, Source={RelativeSource AncestorType={x:Type local:TableViewComponent}}}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedItem, Source={x:Reference Name=ThisContentView}, Mode=TwoWay}"
+                            >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10">
+                                <Label Text="{Binding YourDataProperty}" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+            </Border>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

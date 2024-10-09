@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="VehicleAuctionApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:VehicleAuctionApp"
+    xmlns:views="clr-namespace:VehicleAuctionApp.Views"
+    xmlns:vehicles="clr-namespace:VehicleAuctionApp.Views.Vehicles"
+    xmlns:auctions="clr-namespace:VehicleAuctionApp.Views.Auctions"
+    Title="VehicleAuctionApp"
+    >
+
+    <FlyoutItem Title="Home">
+        <FlyoutItem.Icon>
+            <FontImageSource Glyph="&#xf015;"  
+                             FontFamily="FontAwesomeSolid"
+                             Color="{StaticResource Primary}"
+                             Size="20" />
+        </FlyoutItem.Icon>
+        <ShellContent Title="Home"
+                      Route="homePage"
+                      ContentTemplate="{DataTemplate views:HomePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Vehicles">
+        <FlyoutItem.Icon>
+            <FontImageSource Glyph="&#xf1b9;"
+                             FontFamily="FontAwesomeSolid"
+                             Color="{StaticResource Primary}"
+                             Size="20" />
+        </FlyoutItem.Icon>
+        <ShellContent Title="Vehicles"
+                      Route="vehicles"
+                      ContentTemplate="{DataTemplate vehicles:VehiclesInit}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Auctions">
+        <FlyoutItem.Icon>
+            <FontImageSource Glyph="&#xf145;"
+                             FontFamily="FontAwesomeSolid"
+                             Color="{StaticResource Primary}"
+                             Size="20" />
+        </FlyoutItem.Icon>
+        <ShellContent Title="Auctions"
+                      Route="auctions"
+                      ContentTemplate="{DataTemplate auctions:AuctionsInit}" />
+    </FlyoutItem>
+
+    <Shell.TitleView>
+        <Image Source="logo.png" 
+                   HeightRequest="40"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center" />
+    </Shell.TitleView>
+</Shell>

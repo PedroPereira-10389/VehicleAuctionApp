@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VehicleAuctionApp.Views.Auctions.AuctionDetails"
+             xmlns:components="clr-namespace:VehicleAuctionApp.Views.Components"
+             xmlns:viewModels="clr-namespace:VehicleAuctionApp.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:VehicleAuctionApp.Converters"
+             x:Name="ThisAuctionDetailsPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <ScrollView IsVisible="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}">
+            <StackLayout Padding="20" Spacing="20">
+                <Label Text="{Binding SelectedAuction.DateTime, StringFormat='Auction Date: {0:dd/MM/yyyy HH:mm}'}"
+                       FontSize="Medium" />
+                <Label Text="{Binding DaysRemaining, StringFormat='Auction Date: {0:dd/MM/yyyy HH:mm}'}"
+                       FontSize="Small" />
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Spacing="20">
+                    <Button Text="&#xf0b0;"
+                            FontFamily="FontAwesomeSolid"
+                            FontSize="20"
+                            TextColor="{StaticResource White}"
+                            HorizontalOptions="Center"
+                            Command="{Binding OpenFilterPopupCommand}" />
+
+                    <Button Text="&#xf0dc;"
+                            FontFamily="FontAwesomeSolid"
+                            FontSize="20"
+                            TextColor="{StaticResource White}"
+                            HorizontalOptions="Center"
+                            Command="{Binding OpenSortPopupCommand}" />
+                </StackLayout>
+
+                <Label Text="Vehicles per page" />
+                <Picker ItemsSource="{Binding VehiclesPerPageOptions}"
+                        SelectedItem="{Binding SelectedVehiclesPerPage, Mode=TwoWay}" />
+
+  
+                <CollectionView ItemsSource="{Binding FilteredVehicles}"
+                                SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <components:CardsComponent Vehicle="{Binding}" 
+                                                       TapCommand="{Binding BindingContext.VehicleTappedCommand, Source={x:Reference ThisAuctionDetailsPage}}" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical"
+                                         Span="1"
+                                         HorizontalItemSpacing="10"
+                                         VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                    <Button Text="Previous"
+                            Command="{Binding PreviousPageCommand}"
+                            IsEnabled="{Binding CanGoToPreviousPage}" />
+                    <Label Text="{Binding CurrentPageDisplay}" />
+                    <Button Text="Next"
+                            Command="{Binding NextPageCommand}"
+                            IsEnabled="{Binding CanGoToNextPage}" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+
+        <!-- Indicador de Carregamento -->
+        <StackLayout IsVisible="{Binding IsBusy}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+            <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource Primary}" />
+            <Label Text="Loading Vehicles, please wait..." 
+                   FontSize="Medium"
+                   HorizontalOptions="Center" />
+        </StackLayout>
+    </Grid>
+
+</ContentPage>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VehicleAuctionApp.Views.Vehicles.VehicleDetails"
+             Title="VehicleDetails">
+    <ScrollView>
+        <VerticalStackLayout Padding="15" Spacing="20" BackgroundColor="#f0f0f0">
+
+            <Frame BorderColor="Gray" CornerRadius="10" Padding="0" Margin="0">
+                <Grid>
+                    <Image Source="{Binding ImageSource}" Aspect="AspectFill" HeightRequest="250"/>
+                    <Label Text="{Binding Vehicle.Model}" 
+                           FontAttributes="Bold" 
+                           TextColor="White" 
+                           FontSize="Large" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="End" 
+                           BackgroundColor="#80000000" 
+                           Padding="10" 
+                           HorizontalTextAlignment="Center"/>
+
+                    <ImageButton Source="{Binding FavouriteIcon}" 
+                                 Command="{Binding ToggleFavouriteCommand}"
+                                 HorizontalOptions="End" 
+                                 VerticalOptions="Start" 
+                                 Padding="10"
+                                 BackgroundColor="Transparent"
+                                 HeightRequest="50"
+                                 WidthRequest="50"/>
+                </Grid>
+            </Frame>
+
+ 
+            <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" BackgroundColor="#ffffff">
+                <VerticalStackLayout>
+                    <Label Text="Basic Information" FontAttributes="Bold" FontSize="Medium" Padding="0,0,0,10" TextColor="#3366ff"/>
+                    <Grid ColumnSpacing="10" RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Make:" FontAttributes="Bold" Grid.Row="0" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Make}" Grid.Row="0" Grid.Column="1"/>
+
+                        <Label Text="Model:" FontAttributes="Bold" Grid.Row="1" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Model}" Grid.Row="1" Grid.Column="1"/>
+
+                        <Label Text="Engine Size:" FontAttributes="Bold" Grid.Row="2" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.EngineSize}" Grid.Row="2" Grid.Column="1"/>
+
+                        <Label Text="Fuel Type:" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.FuelType}" Grid.Row="3" Grid.Column="1"/>
+
+                        <Label Text="Year:" FontAttributes="Bold" Grid.Row="4" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Year}" Grid.Row="4" Grid.Column="1"/>
+
+                        <Label Text="Mileage:" FontAttributes="Bold" Grid.Row="5" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Mileage}" Grid.Row="5" Grid.Column="1"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+        
+            <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" BackgroundColor="#fff9e6">
+                <VerticalStackLayout>
+                    <Label Text="Auction Details" FontAttributes="Bold" FontSize="Medium" Padding="0,0,0,10" TextColor="#ff6600"/>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Date:" FontAttributes="Bold"/>
+                        <Label Text="{Binding AuctionDate}"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Hour:" FontAttributes="Bold"/>
+                        <Label Text="{Binding AuctionTime}"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Starting Bid:" FontAttributes="Bold"/>
+                        <Label Text="{Binding Vehicle.StartingBid}" TextColor="Green"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Days Left:" FontAttributes="Bold"/>
+                        <Label Text="{Binding TimeUntilAuction}" />
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Vehicle Specification Section -->
+            <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" BackgroundColor="#e6f7ff">
+                <VerticalStackLayout>
+                    <Label Text="Specifications" FontAttributes="Bold" FontSize="Medium" Padding="0,0,0,10" TextColor="#003366"/>
+                    <Grid ColumnSpacing="10" RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Vehicle Type:" FontAttributes="Bold" Grid.Row="0" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Details.Specification.VehicleType}" Grid.Row="0" Grid.Column="1"/>
+
+                        <Label Text="Colour:" FontAttributes="Bold" Grid.Row="1" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Details.Specification.Colour}" Grid.Row="1" Grid.Column="1"/>
+
+                        <Label Text="Transmission:" FontAttributes="Bold" Grid.Row="2" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Details.Specification.Transmission}" Grid.Row="2" Grid.Column="1"/>
+
+                        <Label Text="Number of Doors:" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Details.Specification.NumberOfDoors}" Grid.Row="3" Grid.Column="1"/>
+
+                        <Label Text="CO2 Emissions:" FontAttributes="Bold" Grid.Row="4" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Details.Specification.CO2Emissions}" Grid.Row="4" Grid.Column="1"/>
+
+                        <Label Text="Nox Emissions:" FontAttributes="Bold" Grid.Row="5" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Details.Specification.NOXEmissions}" Grid.Row="5" Grid.Column="1"/>
+
+                        <Label Text="Keys:" FontAttributes="Bold" Grid.Row="6" Grid.Column="0"/>
+                        <Label Text="{Binding Vehicle.Details.Specification.NumberOfKeys}" Grid.Row="6" Grid.Column="1"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Ownership Information -->
+            <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" BackgroundColor="#ffffff">
+                <VerticalStackLayout>
+                    <Label Text="Ownership" FontAttributes="Bold" FontSize="Medium" Padding="0,0,0,10" TextColor="#3366ff"/>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Logbook:" FontAttributes="Bold"/>
+                        <Label Text="{Binding Vehicle.Details.Ownership.Logbook}"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Number of Owners:" FontAttributes="Bold"/>
+                        <Label Text="{Binding Vehicle.Details.Ownership.NumberOfOwners}"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Date Of Registration:" FontAttributes="Bold"/>
+                        <Label Text="{Binding Vehicle.Details.Ownership.DateOfRegistration}"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Equipment Section -->
+            <Frame BorderColor="LightGray" CornerRadius="10" Padding="10" BackgroundColor="#e6f7ff">
+                <VerticalStackLayout>
+                    <Label Text="Equipment" FontAttributes="Bold" FontSize="Medium" Padding="0,0,0,10" TextColor="#003366"/>
+                    <CollectionView ItemsSource="{Binding Vehicle.Details.Equipment}" 
+                                   BackgroundColor="Transparent">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding .}" FontSize="Small" Padding="5"/>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

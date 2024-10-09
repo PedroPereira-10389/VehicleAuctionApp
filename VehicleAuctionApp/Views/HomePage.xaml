@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VehicleAuctionApp.Views.HomePage"
+             xmlns:components="clr-namespace:VehicleAuctionApp.Views.Components"
+             Title="HomePage">
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+            <Frame CornerRadius="10" BackgroundColor="{StaticResource Primary}" Padding="20">
+                <StackLayout>
+                    <Label Text="Next Auction" FontSize="Medium" TextColor="White"/>
+                    <Label Text="{Binding NextAuctionDate, StringFormat='{0:dd/MM/yyyy HH:mm}'}" FontSize="Large" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="{Binding DaysRemaining}" FontSize="Small" TextColor="White" />
+                </StackLayout>
+            </Frame>
+
+            <Frame CornerRadius="10" BackgroundColor="{StaticResource PrimaryDark}" Padding="20">
+                <StackLayout>
+                    <Label Text="Top Bid Vehicle" FontSize="Medium" TextColor="White"/>
+                    <Label Text="{Binding HighestBidVehicle.Make}" FontSize="Large" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="{Binding HighestBidVehicle.Model}" FontSize="Small" TextColor="White"/>
+                    <Label Text="{Binding HighestBidVehicle.StartingBid, StringFormat='Bid: {0}€'}" FontSize="Small" TextColor="White"/>
+                </StackLayout>
+            </Frame>
+
+            <Label Text="Most Favorited Vehicles" FontSize="Medium" TextColor="{StaticResource PrimaryDark}"></Label>
+            <components:TableViewComponent Items="{Binding MostFavoritedVehicles}"
+                   ColumnDefinitions="{Binding AuctionColumnDefinitions}" 
+                   SelectedItem="{Binding SelectedVehicle, Mode=TwoWay}"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

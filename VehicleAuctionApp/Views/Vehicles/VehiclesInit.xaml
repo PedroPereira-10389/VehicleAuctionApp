@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VehicleAuctionApp.Views.Vehicles.VehiclesInit"
+             xmlns:components="clr-namespace:VehicleAuctionApp.Views.Components"
+             Title="VehiclesInit">
+    <ScrollView x:Name="scrollView" Margin="20">
+        <StackLayout>
+            <components:TableViewComponent Items="{Binding FilteredVehicles}"
+                               ColumnDefinitions="{Binding AuctionColumnDefinitions}" 
+                               SelectedItem="{Binding SelectedVehicle, Mode=TwoWay}"/>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                <Button Text="Previous"
+            Command="{Binding PreviousPageCommand}"
+            IsEnabled="{Binding CanGoToPreviousPage}" />
+                <Label Text="{Binding CurrentPageDisplay}" />
+                <Button Text="Next"
+            Command="{Binding NextPageCommand}"
+            IsEnabled="{Binding CanGoToNextPage}" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
