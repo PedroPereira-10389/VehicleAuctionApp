@@ -11,7 +11,7 @@
                     <Image Source="{Binding ImageSource}" Aspect="AspectFill" HeightRequest="250"/>
                     <Label Text="{Binding Vehicle.Model}" 
                            FontAttributes="Bold" 
-                           TextColor="White" 
+                           TextColor="{StaticResource Secondary}" 
                            FontSize="Large" 
                            HorizontalOptions="Center" 
                            VerticalOptions="End" 

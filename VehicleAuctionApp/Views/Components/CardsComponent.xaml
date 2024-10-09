@@ -14,7 +14,7 @@
         <TapGestureRecognizer Command="{Binding TapCommand, Source={x:Reference ThisBCAFrame}}" CommandParameter="{Binding Vehicle, Source={x:Reference ThisBCAFrame}}" />
     </Frame.GestureRecognizers>
     <StackLayout>
-        <Image Source="dotnet_bot.png"
+        <Image Source="car_example.jpg"
                Aspect="AspectFill"
                HeightRequest="150"
                HorizontalOptions="FillAndExpand" />

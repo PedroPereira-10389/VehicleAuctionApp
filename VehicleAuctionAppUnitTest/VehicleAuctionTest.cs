@@ -79,54 +79,62 @@ namespace VehicleAuctionAppUnitTest
         private void ValidatePropertyType(PropertyInfo property, JsonElement jsonProperty)
         {
             Type propertyType = property.PropertyType;
-            if (propertyType == typeof(string))
-            {
-                Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.String, $"Property '{property.Name}' is not a string.");
-            }
-            else if (propertyType == typeof(int))
-            {
-                Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.Number, $"Property '{property.Name}' is not a number.");
-            }
-            else if (propertyType == typeof(decimal))
-            {
-                Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.Number, $"Property '{property.Name}' is not a number.");
-            }
-            else if (propertyType == typeof(bool))
-            {
-                Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.True || jsonProperty.ValueKind == JsonValueKind.False, $"Property '{property.Name}' is not a boolean.");
-            }
-            else if (propertyType == typeof(DateTime))
-            {
-                Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.String, $"Property '{property.Name}' is not a string.");
-                Assert.IsTrue(DateTime.TryParse(jsonProperty.GetString(), out _), $"Property '{property.Name}' is not a valid DateTime.");
-            }
-            else if (property.PropertyType.IsGenericType && typeof(System.Collections.IEnumerable).IsAssignableFrom(property.PropertyType))
-            {
 
-                Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.Array, $"Property {property.Name} should be an array.");
+            switch (propertyType)
+            {
+                case Type t when t == typeof(string):
+                    Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.String, $"Property '{property.Name}' is not a string.");
+                    break;
 
-                Type itemType = property.PropertyType.GetGenericArguments()[0];
-                foreach (var item in jsonProperty.EnumerateArray())
-                {
-                    if (itemType == typeof(string))
+                case Type t when t == typeof(int):
+                    Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.Number, $"Property '{property.Name}' is not a number.");
+                    break;
+
+                case Type t when t == typeof(decimal):
+                    Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.Number, $"Property '{property.Name}' is not a number.");
+                    break;
+
+                case Type t when t == typeof(bool):
+                    Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.True || jsonProperty.ValueKind == JsonValueKind.False, $"Property '{property.Name}' is not a boolean.");
+                    break;
+
+                case Type t when t == typeof(DateTime):
+                    Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.String, $"Property '{property.Name}' is not a string.");
+                    Assert.IsTrue(DateTime.TryParse(jsonProperty.GetString(), out _), $"Property '{property.Name}' is not a valid DateTime.");
+                    break;
+
+                case Type t when t.IsGenericType && typeof(System.Collections.IEnumerable).IsAssignableFrom(t):
+                    Assert.IsTrue(jsonProperty.ValueKind == JsonValueKind.Array, $"Property {property.Name} should be an array.");
+
+                    Type itemType = t.GetGenericArguments()[0];
+                    foreach (var item in jsonProperty.EnumerateArray())
                     {
-                        Assert.IsTrue(item.ValueKind == JsonValueKind.String, $"Array item in {property.Name} should be a string.");
-                    }
-                    else if (itemType == typeof(int) || itemType == typeof(int?))
-                    {
-                        Assert.IsTrue(item.ValueKind == JsonValueKind.Number, $"Array item in {property.Name} should be a number.");
-                    }
-                }
-            }
-            else if (property.PropertyType.IsClass && property.PropertyType != typeof(string))
-            {
-                ValidateModelAgainstJson(propertyType, jsonProperty);
-            }
+                        switch (itemType)
+                        {
+                            case Type it when it == typeof(string):
+                                Assert.IsTrue(item.ValueKind == JsonValueKind.String, $"Array item in {property.Name} should be a string.");
+                                break;
 
-            else
-            {
-                Assert.Fail($"Unsupported property type: {propertyType.Name}");
+                            case Type it when it == typeof(int) || it == typeof(int?):
+                                Assert.IsTrue(item.ValueKind == JsonValueKind.Number, $"Array item in {property.Name} should be a number.");
+                                break;
+
+                            default:
+                                Assert.Fail($"Unsupported array item type: {itemType.Name}");
+                                break;
+                        }
+                    }
+                    break;
+
+                case Type t when t.IsClass && t != typeof(string):
+                    ValidateModelAgainstJson(t, jsonProperty);
+                    break;
+
+                default:
+                    Assert.Fail($"Unsupported property type: {propertyType.Name}");
+                    break;
             }
         }
     }
-}
+
+ }
