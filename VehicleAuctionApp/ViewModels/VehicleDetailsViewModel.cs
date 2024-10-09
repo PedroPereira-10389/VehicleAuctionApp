@@ -64,7 +64,7 @@ namespace VehicleAuctionApp.ViewModels
                 var timeRemaining = _vehicleAuctionDateTime - DateTime.Now;
 
                 if (timeRemaining.TotalSeconds <= 0)
-                    return "Auction has already ended";
+                    return "Auction is ongoing";
 
                 return $"{timeRemaining.Days} days, {timeRemaining.Hours} hours remaining";
             }
@@ -77,7 +77,7 @@ namespace VehicleAuctionApp.ViewModels
         #region Constructor
         public VehicleDetailsViewModel(Vehicle vehicle)
         {
-            ImageSource = ImageSource.FromFile("dotnet_bot.png");
+            ImageSource = ImageSource.FromFile("car_example.jpg");
             Vehicle = vehicle;
             _auctionDate = vehicle.AuctionDateAndTime.ToString("dd/MM/yyyy");
             _auctionTime = vehicle.AuctionDateAndTime.ToString("hh:mm tt");

@@ -19,7 +19,7 @@
             <StackLayout Padding="20" Spacing="20">
                 <Label Text="{Binding SelectedAuction.DateTime, StringFormat='Auction Date: {0:dd/MM/yyyy HH:mm}'}"
                        FontSize="Medium" />
-                <Label Text="{Binding DaysRemaining, StringFormat='Auction Date: {0:dd/MM/yyyy HH:mm}'}"
+                <Label Text="{Binding DaysRemaining, StringFormat='Remaining Days: {0:dd/MM/yyyy HH:mm}'}"
                        FontSize="Small" />
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Spacing="20">
                     <Button Text="&#xf0b0;"

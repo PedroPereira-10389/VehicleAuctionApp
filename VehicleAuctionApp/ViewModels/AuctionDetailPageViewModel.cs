@@ -271,7 +271,7 @@ namespace VehicleAuctionApp.ViewModels
             var filtered = Vehicles.Where(v =>
                 (string.IsNullOrEmpty(FilterMake) || v.Make == FilterMake) &&
                 (string.IsNullOrEmpty(FilterModel) || v.Model == FilterModel) &&
-                (FilterStartingBid == 0 || v.StartingBid >= FilterStartingBid) &&
+                (FilterStartingBid == 0 || v.StartingBid <= FilterStartingBid) &&
                 (!ShowFavouritesOnly || v.Favourite == ShowFavouritesOnly)
             ).ToList();
             CurrentPage = 1;
@@ -387,7 +387,7 @@ namespace VehicleAuctionApp.ViewModels
             }
             else
             {
-                DaysRemaining = "Auction started!";
+                DaysRemaining = "Auction is ongoing!";
             }
         }
         #endregion
