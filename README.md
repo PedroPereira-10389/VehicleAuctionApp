@@ -16,7 +16,7 @@ This project includes an overhaul of the UI, the addition of new services, and t
 
 **Setup and Installation**
  - Clone the repository: git clone https://github.com/PedroPereira-10389/VehicleAuctionApp.git
- - cd TestMobile
+ - cd VehicleAuctionApp
  - Install dependencies: dotnet restore
  - Build the project: dotnet build
  - Run the app: dotnet run
