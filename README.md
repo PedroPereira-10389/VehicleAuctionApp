@@ -15,7 +15,8 @@ This project includes an overhaul of the UI, the addition of new services, and t
  - MauiCheck tool (optional but recommended): Install using the command dotnet tool install -g Redth.Net.Maui.Check.
 
 **Setup and Installation**
- - Clone the repository: git clone https://github.com/your-repository-url.git cd TestMobile
+ - Clone the repository: git clone https://github.com/your-repository-url.git](https://github.com/PedroPereira-10389/VehicleAuctionApp.git
+ - cd TestMobile
  - Install dependencies: dotnet restore
  - Build the project: dotnet build
  - Run the app: dotnet run
