@@ -14,7 +14,7 @@ namespace VehicleAuctionApp.ViewModels
         #region Fields
         private int _selectedVehiclesPerPage;
         private int _currentPage = 1;
-        public decimal _filterStartingBid;
+        public int _filterStartingBid;
         public string _filterMake = string.Empty;
         public string _filterModel = string.Empty;
         private string _selectedSortOption = string.Empty;
@@ -39,6 +39,8 @@ namespace VehicleAuctionApp.ViewModels
             "Make", "Starting Bid", "Mileage", "Auction Date"
         };
         public bool ShowFavouritesOnly { get; set; }
+        private List<Vehicle> _filteredAndSortedVehicles = new List<Vehicle>();
+
 
         public decimal MaxBid
         {
@@ -57,6 +59,7 @@ namespace VehicleAuctionApp.ViewModels
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
         public ICommand OpenFilterPopupCommand { get; }
+        public ICommand ClearFiltersCommand { get; }
 
         public ICommand OpenSortPopupCommand { get; }
 
@@ -113,7 +116,7 @@ namespace VehicleAuctionApp.ViewModels
             }
         }
 
-        public decimal FilterStartingBid
+        public int FilterStartingBid
         {
             get => _filterStartingBid;
             set
@@ -198,7 +201,6 @@ namespace VehicleAuctionApp.ViewModels
             {
                 _currentPage = value;
                 OnPropertyChanged(nameof(CurrentPage));
-                LoadInitialVehicles();
             }
         }
 
@@ -228,6 +230,7 @@ namespace VehicleAuctionApp.ViewModels
             PreviousPageCommand = new Command(GoToPreviousPage);
             OpenFilterPopupCommand = new Command(OpenFilterPopup);
             OpenSortPopupCommand = new Command(OpenSortPopup);
+            ClearFiltersCommand = new Command(ClearFilters);
             LoadInitialVehicles();
         }
         #endregion
@@ -238,6 +241,7 @@ namespace VehicleAuctionApp.ViewModels
             if (SelectedAuction == null || !SelectedAuction.Vehicles.Any()) return;
 
             FilteredVehicles.Clear();
+            _filteredAndSortedVehicles = Vehicles;
             var initialVehicles = Vehicles.Skip((_currentPage - 1) * SelectedVehiclesPerPage).Take(SelectedVehiclesPerPage).ToList();
             foreach (var vehicle in initialVehicles)
             {
@@ -268,91 +272,124 @@ namespace VehicleAuctionApp.ViewModels
             await _navigation.PopModalAsync();
             IsBusy = true;
 
-            var filtered = Vehicles.Where(v =>
-                (string.IsNullOrEmpty(FilterMake) || v.Make == FilterMake) &&
-                (string.IsNullOrEmpty(FilterModel) || v.Model == FilterModel) &&
-                (FilterStartingBid == 0 || v.StartingBid <= FilterStartingBid) &&
-                (!ShowFavouritesOnly || v.Favourite == ShowFavouritesOnly)
-            ).ToList();
-            CurrentPage = 1;
-            _totalFilteredVehicles = filtered.Count;
-            FilteredVehicles.Clear();
-            var paginatedVehicles = filtered.Skip((CurrentPage - 1) * SelectedVehiclesPerPage).Take(SelectedVehiclesPerPage).ToList();
-
-            foreach (var vehicle in paginatedVehicles)
+            await Task.Run(() =>
             {
-                FilteredVehicles.Add(vehicle);
-            }
+                
+                _filteredAndSortedVehicles = Vehicles;
 
-            OnPropertyChanged(nameof(TotalPages));
-            OnPropertyChanged(nameof(CurrentPageDisplay));
-            OnPropertyChanged(nameof(FilteredVehicles));
+                if (!string.IsNullOrEmpty(FilterMake))
+                {
+                    _filteredAndSortedVehicles = _filteredAndSortedVehicles
+                        .Where(v => v.Make == FilterMake)
+                        .ToList();
+                }
+
+                if (!string.IsNullOrEmpty(FilterModel))
+                {
+                    _filteredAndSortedVehicles = _filteredAndSortedVehicles
+                        .Where(v => v.Model == FilterModel)
+                        .ToList();
+                }
+
+                if (FilterStartingBid > 0)
+                {
+                    _filteredAndSortedVehicles = _filteredAndSortedVehicles
+                        .Where(v => v.StartingBid >= FilterStartingBid)
+                        .ToList();
+                }
+
+                ApplySortToFilteredVehicles();
+
+                CurrentPage = 1;
+                _totalFilteredVehicles = _filteredAndSortedVehicles.Count;
+                LoadFilteredAndPaginatedVehicles();
+            });
+
             IsBusy = false;
         }
+
 
         private async void ApplySort()
         {
             await _navigation.PopModalAsync();
             IsBusy = true;
+
             await Task.Run(() =>
             {
-
-                IEnumerable<Vehicle> sortedVehicles = Vehicles;
-
-                switch (SelectedSortOption)
-                {
-                    case "Make":
-                        sortedVehicles = IsDescending
-                            ? sortedVehicles.OrderByDescending(v => v.Make)
-                            : sortedVehicles.OrderBy(v => v.Make);
-                        break;
-                    case "Starting Bid":
-                        sortedVehicles = IsDescending
-                            ? sortedVehicles.OrderByDescending(v => v.StartingBid)
-                            : sortedVehicles.OrderBy(v => v.StartingBid);
-                        break;
-                    case "Mileage":
-                        sortedVehicles = IsDescending
-                            ? sortedVehicles.OrderByDescending(v => v.Mileage)
-                            : sortedVehicles.OrderBy(v => v.Mileage);
-                        break;
-                    case "Auction Date":
-                        sortedVehicles = IsDescending
-                            ? sortedVehicles.OrderByDescending(v => v.AuctionDateAndTime)
-                            : sortedVehicles.OrderBy(v => v.AuctionDateAndTime);
-                        break;
-                }
-
-                var sortedList = sortedVehicles.ToList();
-                var paginatedVehicles = sortedList
-                    .Skip((CurrentPage - 1) * SelectedVehiclesPerPage)
-                    .Take(SelectedVehiclesPerPage)
-                    .ToList();
-
-                Application.Current!.Dispatcher.Dispatch(() =>
-                {
-                    FilteredVehicles.Clear();
-
-                    foreach (var vehicle in paginatedVehicles)
-                    {
-                        FilteredVehicles.Add(vehicle);
-                    }
-
-                    OnPropertyChanged(nameof(TotalPages));
-                    OnPropertyChanged(nameof(CurrentPageDisplay));
-                    OnPropertyChanged(nameof(FilteredVehicles));
-                });
+                ApplySortToFilteredVehicles();
+                CurrentPage = 1;
+                LoadFilteredAndPaginatedVehicles();
             });
 
             IsBusy = false;
         }
+
+        private void LoadFilteredAndPaginatedVehicles()
+        {
+            var paginatedVehicles = _filteredAndSortedVehicles
+                .Skip((CurrentPage - 1) * SelectedVehiclesPerPage)
+                .Take(SelectedVehiclesPerPage)
+                .ToList();
+            FilteredVehicles.Clear();
+            Application.Current!.Dispatcher.Dispatch(() =>
+            {
+
+                foreach (var vehicle in paginatedVehicles)
+                {
+                    FilteredVehicles.Add(vehicle);
+                }
+
+                OnPropertyChanged(nameof(TotalPages));
+                OnPropertyChanged(nameof(CurrentPageDisplay));
+                OnPropertyChanged(nameof(FilteredVehicles));
+
+                CanGoToNextPage = CurrentPage < TotalPages;
+                CanGoToPreviousPage = CurrentPage > 1;
+            });
+        }
+
+        private void ApplySortToFilteredVehicles()
+        {
+            IEnumerable<Vehicle> sortedVehicles = _filteredAndSortedVehicles;
+
+            switch (SelectedSortOption)
+            {
+                case "Make":
+                    sortedVehicles = IsDescending
+                        ? sortedVehicles.OrderByDescending(v => v.Make)
+                        : sortedVehicles.OrderBy(v => v.Make);
+                    break;
+                case "Starting Bid":
+                    sortedVehicles = IsDescending
+                        ? sortedVehicles.OrderByDescending(v => v.StartingBid)
+                        : sortedVehicles.OrderBy(v => v.StartingBid);
+                    break;
+                case "Mileage":
+                    sortedVehicles = IsDescending
+                        ? sortedVehicles.OrderByDescending(v => v.Mileage)
+                        : sortedVehicles.OrderBy(v => v.Mileage);
+                    break;
+                case "Auction Date":
+                    sortedVehicles = IsDescending
+                        ? sortedVehicles.OrderByDescending(v => v.AuctionDateAndTime)
+                        : sortedVehicles.OrderBy(v => v.AuctionDateAndTime);
+                    break;
+                default:
+                    // No sorting applied
+                    break;
+            }
+
+            _filteredAndSortedVehicles = sortedVehicles.ToList();
+
+        }
+
 
         private void GoToNextPage()
         {
             if (_currentPage < TotalPages)
             {
                 _currentPage++;
-                LoadInitialVehicles();
+                LoadFilteredAndPaginatedVehicles();
             }
         }
 
@@ -361,7 +398,7 @@ namespace VehicleAuctionApp.ViewModels
             if (_currentPage > 1)
             {
                 _currentPage--;
-                LoadInitialVehicles();
+                LoadFilteredAndPaginatedVehicles();
             }
         }
 
@@ -389,6 +426,15 @@ namespace VehicleAuctionApp.ViewModels
             {
                 DaysRemaining = "Auction is ongoing!";
             }
+        }
+
+        private void ClearFilters()
+        {
+            FilterMake = string.Empty;
+            FilterModel = string.Empty;
+            FilterStartingBid = 0;
+            ShowFavouritesOnly = false;
+            ApplyFilters();
         }
         #endregion
 

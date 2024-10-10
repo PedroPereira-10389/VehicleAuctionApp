@@ -1,8 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 namespace VehicleAuctionApp.Models
 {
-    public class Vehicle
+    public class Vehicle : INotifyPropertyChanged
     {
         [JsonPropertyName("make")]
         public required string Make { get; set; }
@@ -39,11 +41,26 @@ namespace VehicleAuctionApp.Models
         [JsonPropertyName("startingBid")]
         public decimal StartingBid { get; set; }
 
+        private bool _favourite;
         [JsonPropertyName("favourite")]
-        public bool Favourite { get; set; }
+        public bool Favourite
+        {
+            get => _favourite;
+            set
+            {
+                if (_favourite != value)
+                {
+                    _favourite = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         [JsonPropertyName("details")]
         public required Details Details { get; set; }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
