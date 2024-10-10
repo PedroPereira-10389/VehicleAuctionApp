@@ -7,7 +7,7 @@ using VehicleAuctionApp.Models.Components;
 
 namespace VehicleAuctionApp.ViewModels
 {
-    public class VehiclesPageViewModel
+    public class VehiclesPageViewModel : INotifyPropertyChanged
     {
         #region Properties
         private List<Vehicle>? _vehicles;
@@ -19,14 +19,19 @@ namespace VehicleAuctionApp.ViewModels
         private bool _canGoToNextPage;
         private bool _canGoToPreviousPage;
 
-        public ICommand NextPageCommand { get; }
-        public ICommand PreviousPageCommand { get; }
+        private Command _nextPageCommand;
+        public ICommand NextPageCommand => _nextPageCommand ??= new Command(GoToNextPage, () => CanGoToNextPage);
+
+        private Command _previousPageCommand;
+        public ICommand PreviousPageCommand => _previousPageCommand ??= new Command(GoToPreviousPage, () => CanGoToPreviousPage);
         public List<Vehicle> Vehicles
         {
             get => _vehicles!;
             set
             {
                 _vehicles = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TotalPages));
             }
         }
 
@@ -66,8 +71,12 @@ namespace VehicleAuctionApp.ViewModels
             get => _canGoToNextPage;
             set
             {
-                _canGoToNextPage = value;
-                OnPropertyChanged();
+                if (_canGoToNextPage != value)
+                {
+                    _canGoToNextPage = value;
+                    OnPropertyChanged();
+                    _nextPageCommand?.ChangeCanExecute();
+                }
             }
         }
 
@@ -76,8 +85,12 @@ namespace VehicleAuctionApp.ViewModels
             get => _canGoToPreviousPage;
             set
             {
-                _canGoToPreviousPage = value;
-                OnPropertyChanged();
+                if (_canGoToPreviousPage != value)
+                {
+                    _canGoToPreviousPage = value;
+                    OnPropertyChanged();
+                    _previousPageCommand?.ChangeCanExecute();
+                }
             }
         }
         #endregion
@@ -90,8 +103,8 @@ namespace VehicleAuctionApp.ViewModels
             InitializeColumnDefinitions();
             SelectedVehiclesPerPage = 10;
             _ = LoadPageDataAsync();
-            NextPageCommand = new Command(GoToNextPage);
-            PreviousPageCommand = new Command(GoToPreviousPage);
+            _nextPageCommand = new Command(GoToNextPage, () => CanGoToNextPage);
+            _previousPageCommand = new Command(GoToPreviousPage, () => CanGoToPreviousPage);
         }
         #endregion
 
@@ -116,6 +129,7 @@ namespace VehicleAuctionApp.ViewModels
             CanGoToPreviousPage = _currentPage > 1;
 
             OnPropertyChanged(nameof(CurrentPageDisplay));
+            OnPropertyChanged(nameof(TotalPages));
         }
 
         private async Task LoadAuctions()

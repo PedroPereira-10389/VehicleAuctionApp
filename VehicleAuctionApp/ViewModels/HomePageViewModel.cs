@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using VehicleAuctionApp.Models;
 using VehicleAuctionApp.Models.Components;
@@ -14,7 +15,7 @@ namespace VehicleAuctionApp.ViewModels
         private List<CustomColumnDefinition> _auctionColumnDefinitions;
         private Vehicle? _selectedVehicle;
         private Vehicle? _highestBidVehicle;
-        public List<Vehicle> MostFavoritedVehicles { get; set; }
+        public ObservableCollection<Vehicle> MostFavoritedVehicles { get; set; }
         public string DaysRemaining
         {
             get => _daysRemaining!;
@@ -82,7 +83,6 @@ namespace VehicleAuctionApp.ViewModels
         public HomePageViewModel()
         {
             _auctionColumnDefinitions = new List<CustomColumnDefinition>();
-            MostFavoritedVehicles = new List<Vehicle>();
             InitializeColumnDefinitions();
             LoadData();
         }
@@ -108,7 +108,11 @@ namespace VehicleAuctionApp.ViewModels
                 .FirstOrDefault() ?? new Auction { DateAndTimeRaw = "", Vehicles = new List<Vehicle>() };
             NextAuctionDate = nexAuction.DateTime;
             List<Vehicle> vehiclesList = nexAuction.Vehicles;
-            MostFavoritedVehicles = vehiclesList.Where(v => v.Favourite).ToList();
+            foreach (var vehicle in vehiclesList)
+            {
+                vehicle.PropertyChanged += Vehicle_PropertyChanged;
+            }
+            MostFavoritedVehicles = new ObservableCollection<Vehicle>(vehiclesList.Where(v => v.Favourite));
             HighestBidVehicle = vehiclesList.OrderByDescending(v => v.StartingBid).FirstOrDefault();
         }
 
@@ -137,6 +141,32 @@ namespace VehicleAuctionApp.ViewModels
                 DaysRemaining = "Auction started!";
             }
         }
+
+        private void Vehicle_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Vehicle.Favourite))
+            {
+                var vehicle = sender as Vehicle;
+                if (vehicle != null)
+                {
+                    if (vehicle.Favourite)
+                    {
+                        if (!MostFavoritedVehicles.Contains(vehicle))
+                        {
+                            MostFavoritedVehicles.Add(vehicle);
+                        }
+                    }
+                    else
+                    {
+                        if (MostFavoritedVehicles.Contains(vehicle))
+                        {
+                            MostFavoritedVehicles.Remove(vehicle);
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region INotifyPropertyChanged

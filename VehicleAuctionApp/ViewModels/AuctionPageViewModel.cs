@@ -25,7 +25,7 @@ namespace VehicleAuctionApp.ViewModels
             get => _selectedAuction;
             set
             {
-                if (_selectedAuction != value && value != null)
+                if (_selectedAuction != value)
                 {
                     _selectedAuction = value;
                     OnPropertyChanged();
@@ -60,12 +60,12 @@ namespace VehicleAuctionApp.ViewModels
             if (auction == null)
                 return;
 
-            SelectedAuction = null;
-
             if (Application.Current?.MainPage?.Navigation != null)
             {
                 await Application.Current.MainPage.Navigation.PushAsync(new Views.Auctions.AuctionDetails(auction));
             }
+            SelectedAuction = null;
+
         }
         #endregion
 
