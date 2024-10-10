@@ -25,8 +25,8 @@
 
             <Label Text="Most Favorited Vehicles" FontSize="Medium" TextColor="{StaticResource PrimaryDark}"></Label>
             <components:TableViewComponent Items="{Binding MostFavoritedVehicles}"
-                   ColumnDefinitions="{Binding AuctionColumnDefinitions}" 
-                   SelectedItem="{Binding SelectedVehicle, Mode=TwoWay}"/>
+                    ColumnDefinitions="{Binding AuctionColumnDefinitions}" 
+                    SelectedItem="{Binding SelectedVehicle, Mode=TwoWay}"/>
         </StackLayout>
     </ScrollView>
 </ContentPage>

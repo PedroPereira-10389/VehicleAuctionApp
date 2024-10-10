@@ -375,7 +375,6 @@ namespace VehicleAuctionApp.ViewModels
                         : sortedVehicles.OrderBy(v => v.AuctionDateAndTime);
                     break;
                 default:
-                    // No sorting applied
                     break;
             }
 

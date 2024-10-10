@@ -15,7 +15,7 @@ namespace VehicleAuctionApp.ViewModels
         private List<CustomColumnDefinition> _auctionColumnDefinitions;
         private Vehicle? _selectedVehicle;
         private Vehicle? _highestBidVehicle;
-        public ObservableCollection<Vehicle> MostFavoritedVehicles { get; set; }
+        public ObservableCollection<Vehicle>? MostFavoritedVehicles { get; set; }
         public string DaysRemaining
         {
             get => _daysRemaining!;
@@ -151,14 +151,14 @@ namespace VehicleAuctionApp.ViewModels
                 {
                     if (vehicle.Favourite)
                     {
-                        if (!MostFavoritedVehicles.Contains(vehicle))
+                        if (!MostFavoritedVehicles!.Contains(vehicle))
                         {
-                            MostFavoritedVehicles.Add(vehicle);
+                            MostFavoritedVehicles!.Add(vehicle);
                         }
                     }
                     else
                     {
-                        if (MostFavoritedVehicles.Contains(vehicle))
+                        if (MostFavoritedVehicles!.Contains(vehicle))
                         {
                             MostFavoritedVehicles.Remove(vehicle);
                         }

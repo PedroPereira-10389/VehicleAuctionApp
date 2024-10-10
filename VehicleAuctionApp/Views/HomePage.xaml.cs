@@ -11,5 +11,4 @@ public partial class HomePage : ContentPage
         _viewModel = new HomePageViewModel();
         BindingContext = _viewModel;
     }
-   
 }

@@ -10,7 +10,4 @@ public partial class VehicleDetails : ContentPage
         InitializeComponent();
         BindingContext = new VehicleDetailsViewModel(vehicle);
     }
-
-
-
 }

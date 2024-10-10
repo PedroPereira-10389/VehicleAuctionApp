@@ -6,13 +6,10 @@
              Title="VehiclesInit">
     <ScrollView x:Name="scrollView" Margin="20">
         <StackLayout>
-            <components:TableViewComponent Items="{Binding FilteredVehicles}"
-                               ColumnDefinitions="{Binding AuctionColumnDefinitions}" 
-                               SelectedItem="{Binding SelectedVehicle, Mode=TwoWay}"/>
+            <components:TableViewComponent Items="{Binding FilteredVehicles}" ColumnDefinitions="{Binding AuctionColumnDefinitions}" 
+                                           SelectedItem="{Binding SelectedVehicle, Mode=TwoWay}"/>
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
-                <Button Text="Previous"
-            Command="{Binding PreviousPageCommand}"
-            IsEnabled="{Binding CanGoToPreviousPage}" />
+                <Button Text="Previous" Command="{Binding PreviousPageCommand}" IsEnabled="{Binding CanGoToPreviousPage}" />    
                 <Label Text="{Binding CurrentPageDisplay}" />
                 <Button Text="Next"
             Command="{Binding NextPageCommand}"

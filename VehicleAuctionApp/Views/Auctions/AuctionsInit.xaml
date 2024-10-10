@@ -20,7 +20,6 @@
         </DataTemplate>
     </ContentPage.Resources>
 
-  
     <StackLayout Padding="20" Spacing="20">
         <ListView ItemsSource="{Binding Auctions}"
                  SelectionMode="Single"
@@ -66,13 +65,13 @@
                                     <VisualState Name="Normal">
                                         <VisualState.Setters>
                                             <Setter Property="BackgroundColor" Value="White" />
-                                          
+
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState Name="Selected">
                                         <VisualState.Setters>
                                             <Setter Property="BackgroundColor" Value="{StaticResource PrimaryDark}" />
-                                          
+
                                         </VisualState.Setters>
                                     </VisualState>
                                 </VisualStateGroup>
@@ -83,5 +82,4 @@
             </ListView.ItemTemplate>
         </ListView>
     </StackLayout>
-   
 </ContentPage>
