@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VehicleAuctionApp.Views.Shopping.ShoppingInit"
+             xmlns:components="clr-namespace:VehicleAuctionApp.Views.Components"
+             Title="ShoppingInit">
+       <Grid>
+              <ScrollView>
+                     <StackLayout Padding="15"
+                                  Spacing="20"
+                                  BackgroundColor="#f0f0f0">
+                            <Label Text="Buy Form"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   Margin="0,20,0,20"/>
+
+                            <Label Text="Full Name"/>
+                            <Entry Placeholder="Enter Full Name"
+                                   Text="{Binding BuyerName}"/>
+
+                            <Label Text="Email"/>
+                            <Entry Placeholder="Enter Email"
+                                   Text="{Binding BuyerEmail}"/>
+
+                            <Label Text="Phone"/>
+                            <Entry Placeholder="Enter Phone"
+                                   Text="{Binding BuyerPhone}"/>
+
+                            <Label Text="Address"/>
+                            <Entry Placeholder="Enter Address"
+                                   Text="{Binding BuyerAddress}"/>
+
+                            <Label Text="Date of Birth"/>
+                            <DatePicker Date="{Binding BuyerDOB}"/>
+
+                            <Button Text="Submit"
+                                    Command="{Binding SubmitOnClickedCommand}"
+                                    CommandParameter="{Binding SelectedVehicle}"
+                                    BackgroundColor="{StaticResource Primary}"
+                                    TextColor="{StaticResource Secondary}"
+                                    Margin="0,20,0,20"/>
+                     </StackLayout>
+              </ScrollView>
+              <components:LoadingOverlay IsVisible="{Binding IsBusy}"/>
+       </Grid>
+</ContentPage>

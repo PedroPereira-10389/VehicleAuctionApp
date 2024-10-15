@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
 using VehicleAuctionApp.Models;
+using VehicleAuctionApp.Views.Shopping;
 
 namespace VehicleAuctionApp.ViewModels
 {
@@ -44,6 +45,7 @@ namespace VehicleAuctionApp.ViewModels
 
         public string FavouriteIcon => Favourite ? "star_filled.png" : "star_outline.png";
         public ICommand ToggleFavouriteCommand { get; }
+        public ICommand NavigateBuyPageCommand { get; }
 
         public Vehicle Vehicle
         {
@@ -83,7 +85,7 @@ namespace VehicleAuctionApp.ViewModels
             _auctionTime = vehicle.AuctionDateAndTime.ToString("hh:mm tt");
             _vehicleAuctionDateTime = vehicle.AuctionDateAndTime;
             ToggleFavouriteCommand = new Command(ToggleFavourite);
-
+            NavigateBuyPageCommand = new Command(async () => await NavigateBuyPage());
         }
         #endregion
 
@@ -91,6 +93,11 @@ namespace VehicleAuctionApp.ViewModels
         private void ToggleFavourite()
         {
             Favourite = !Favourite;
+        }
+
+        private async Task NavigateBuyPage()
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new ShoppingInit(Vehicle));
         }
         #endregion
 

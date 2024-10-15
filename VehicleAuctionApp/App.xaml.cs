@@ -7,6 +7,7 @@ namespace VehicleAuctionApp
     public partial class App : Application
     {
         public static List<Auction>? AuctionList { get; private set; }
+        public static List<Vehicle>? Vehicles { get; set; }
         private readonly LoadingService _loadingService;
 
         public App()
@@ -24,9 +25,9 @@ namespace VehicleAuctionApp
 
         private async Task LoadData()
         {
-            var filePath = "vehicles_dataset.json";
             var loadingService = new LoadingService();
-            AuctionList = await _loadingService.LoadingFile(filePath);
+            string filePath = await loadingService.CheckFileExistsOrCreate("vehicles_dataset.json");
+            (Vehicles, AuctionList) = await _loadingService.LoadingFile(filePath);
             MainPage = new AppShell();
         }
     }

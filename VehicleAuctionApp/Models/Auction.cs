@@ -6,13 +6,13 @@ namespace VehicleAuctionApp.Models
     {
 
         [JsonPropertyName("auctionDateTime")]
-        public required string DateAndTimeRaw { get; set; }
+        public required string? DateAndTimeRaw { get; set; }
 
         public DateTime DateTime
         {
             get
             {
-                return DateTime.Parse(DateAndTimeRaw);
+                return DateTime.Parse(DateAndTimeRaw!);
             }
         }
 
