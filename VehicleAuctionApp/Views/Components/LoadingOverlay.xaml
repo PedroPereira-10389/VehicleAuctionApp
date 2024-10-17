@@ -5,7 +5,9 @@
              IsVisible="{Binding IsOverlayVisible, Mode=TwoWay}">
   <Grid x:Name="OverlayGrid"
         BackgroundColor="Black"
-        Opacity="0.5">
+        Opacity="0.5"
+        IsVisible="False"
+        >
     <ActivityIndicator IsRunning="True"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"

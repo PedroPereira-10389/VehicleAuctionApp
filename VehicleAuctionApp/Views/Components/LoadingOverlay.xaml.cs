@@ -5,7 +5,6 @@ namespace VehicleAuctionApp.Views.Components
 		public LoadingOverlay()
 		{
 			InitializeComponent();
-			BindingContext = this;
 		}
 
 		public static readonly BindableProperty IsOverlayVisibleProperty =

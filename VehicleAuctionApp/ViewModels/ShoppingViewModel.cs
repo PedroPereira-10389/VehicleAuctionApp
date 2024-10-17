@@ -13,8 +13,7 @@ namespace VehicleAuctionApp.ViewModels;
 public partial class ShoppingPageViewModel : INotifyPropertyChanged
 {
     #region Properties
-    private bool _isBusy;
-
+    private bool _isBusy = false;
     public bool IsBusy
     {
         get => _isBusy;
@@ -46,7 +45,8 @@ public partial class ShoppingPageViewModel : INotifyPropertyChanged
     {
         try
         {
-            IsBusy = true;
+                IsBusy = true;
+           
 
             // Simulate a delay (for demo purposes)
             await Task.Delay(3000);
@@ -57,7 +57,9 @@ public partial class ShoppingPageViewModel : INotifyPropertyChanged
         }
         finally
         {
-            IsBusy = false;
+           
+                IsBusy = false;
+        
         }
     }
     #endregion

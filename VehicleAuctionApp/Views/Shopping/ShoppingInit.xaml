@@ -4,18 +4,20 @@
              x:Class="VehicleAuctionApp.Views.Shopping.ShoppingInit"
              xmlns:components="clr-namespace:VehicleAuctionApp.Views.Components"
              Title="ShoppingInit">
+    <Grid>
+        <ScrollView>
+            <StackLayout Padding="15"
+                     Spacing="20"
+                     BackgroundColor="#f0f0f0">
 
-       <ScrollView>
-              <StackLayout Padding="15"
-                           Spacing="20"
-                           BackgroundColor="#f0f0f0">
+                <Button Text="Submit"
+                       Command="{Binding SubmitCommand}"
+                       BackgroundColor="{StaticResource Primary}"
+                       TextColor="{StaticResource Secondary}"
+                       Margin="0,20,0,20"/>
 
-                     <Button Text="Submit"
-                             Command="{Binding SubmitCommand}"
-                             BackgroundColor="{StaticResource Primary}"
-                             TextColor="{StaticResource Secondary}"
-                             Margin="0,20,0,20"/>
-                     <components:LoadingOverlay IsOverlayVisible="{Binding IsBusy}"/>
-              </StackLayout>
-       </ScrollView>
+            </StackLayout>
+        </ScrollView>
+        <components:LoadingOverlay IsOverlayVisible="{Binding IsBusy}" />
+    </Grid>
 </ContentPage>
