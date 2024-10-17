@@ -1,25 +1,27 @@
-namespace VehicleAuctionApp.Views.Components;
-
-public partial class LoadingOverlay : ContentView
+namespace VehicleAuctionApp.Views.Components
 {
-	public LoadingOverlay()
+	public partial class LoadingOverlay : ContentView
 	{
-		InitializeComponent();
-	}
+		public LoadingOverlay()
+		{
+			InitializeComponent();
+			BindingContext = this;
+		}
 
-	public static readonly BindableProperty IsBusyProperty =
-		   BindableProperty.Create(nameof(IsBusy), typeof(bool), typeof(LoadingOverlay), false, propertyChanged: OnIsBusyChanged);
+		public static readonly BindableProperty IsOverlayVisibleProperty =
+			BindableProperty.Create(nameof(IsOverlayVisible), typeof(bool), typeof(LoadingOverlay), false, propertyChanged: OnIsOverlayVisibleChanged);
 
-	public bool IsBusy
-	{
-		get => (bool)GetValue(IsBusyProperty);
-		set => SetValue(IsBusyProperty, value);
-	}
+		public bool IsOverlayVisible
+		{
+			get => (bool)GetValue(IsOverlayVisibleProperty);
+			set => SetValue(IsOverlayVisibleProperty, value);
+		}
 
-	private static void OnIsBusyChanged(BindableObject bindable, object oldValue, object newValue)
-	{
-		var control = (LoadingOverlay)bindable;
-		bool isBusy = (bool)newValue;
-		control.OverlayGrid.IsVisible = isBusy;
+		private static void OnIsOverlayVisibleChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			var control = (LoadingOverlay)bindable;
+			bool isVisible = (bool)newValue;
+			control.OverlayGrid.IsVisible = isVisible;
+		}
 	}
 }

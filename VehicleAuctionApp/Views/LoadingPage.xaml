@@ -4,8 +4,9 @@
              x:Class="VehicleAuctionApp.Views.LoadingPage"
              Title="LoadingPage">
 
-    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-        <ActivityIndicator IsRunning="True" />
-        <Label Text="Loading Auctions..." />
+    <StackLayout HorizontalOptions="Center"
+            VerticalOptions="Center">
+        <ActivityIndicator IsRunning="True"/>
+        <Label Text="Loading Auctions..."/>
     </StackLayout>
 </ContentPage>

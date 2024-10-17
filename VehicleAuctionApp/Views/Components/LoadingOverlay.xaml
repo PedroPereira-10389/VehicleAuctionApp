@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="VehicleAuctionApp.Views.Components.LoadingOverlay">
+             x:Class="VehicleAuctionApp.Views.Components.LoadingOverlay"
+             IsVisible="{Binding IsOverlayVisible, Mode=TwoWay}">
   <Grid x:Name="OverlayGrid"
-        IsVisible="false"
         BackgroundColor="Black"
         Opacity="0.5">
     <ActivityIndicator IsRunning="True"
